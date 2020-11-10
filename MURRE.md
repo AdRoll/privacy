@@ -584,8 +584,8 @@ browser to tell the truth very often, but note the amount of ones we’re
 actually adding to the vector, on average:
 
 ![\\begin{aligned}
-2^{27} \\cdot 2^{-18} \\cdot \\frac{1/2} = 2^{8} = 256\\end{aligned}](https://latex.codecogs.com/png.latex?%5Cbegin%7Baligned%7D%0A2%5E%7B27%7D%20%5Ccdot%202%5E%7B-18%7D%20%5Ccdot%20%5Cfrac%7B1%2F2%7D%20%3D%202%5E%7B8%7D%20%3D%20256%5Cend%7Baligned%7D "\begin{aligned}
-2^{27} \cdot 2^{-18} \cdot \frac{1/2} = 2^{8} = 256\end{aligned}")
+2^{27} \\cdot 2^{-18} \\cdot \\frac{1}{2} = 2^{8} = 256\\end{aligned}](https://latex.codecogs.com/png.latex?%5Cbegin%7Baligned%7D%0A2%5E%7B27%7D%20%5Ccdot%202%5E%7B-18%7D%20%5Ccdot%20%5Cfrac%7B1%7D%7B2%7D%20%3D%202%5E%7B8%7D%20%3D%20256%5Cend%7Baligned%7D "\begin{aligned}
+2^{27} \cdot 2^{-18} \cdot \frac{1}{2} = 2^{8} = 256\end{aligned}")
 
 This is a completely reasonable size to send over the wire, a mere 256
 additional integers to send. From a data interpretation perspective,
