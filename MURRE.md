@@ -527,9 +527,7 @@ directly, but rather having it defined through a selection of both
 ![p](https://latex.codecogs.com/png.latex?p "p") based on technical and
 accuracy concerns. While we don’t have a theoretical analysis of how
 these parameters affect model performance, we can provide an empirical
-analysis. We have done this for
-![M](https://latex.codecogs.com/png.latex?M "M"), and result for
-![p](https://latex.codecogs.com/png.latex?p "p") are forthcoming.
+analysis.
 
 The choice of ![M](https://latex.codecogs.com/png.latex?M "M") has very
 little to do with the technical side of things. We would hope that
@@ -573,6 +571,47 @@ the wire under a resonably sized
 bound to ensure the feasibility of the proposal. From there, we also
 need ![p](https://latex.codecogs.com/png.latex?p "p") to be large enough
 to not have a detrimental impact on accuracy.
+
+For these reasons, we ran experiments with
+![p](https://latex.codecogs.com/png.latex?p "p") ranging from
+![1 - 2^{-a}](https://latex.codecogs.com/png.latex?1%20-%202%5E%7B-a%7D "1 - 2^{-a}")
+for
+![a \\in \\{18, 19, \\ldots, 27\\}](https://latex.codecogs.com/png.latex?a%20%5Cin%20%5C%7B18%2C%2019%2C%20%5Cldots%2C%2027%5C%7D "a \in \{18, 19, \ldots, 27\}")
+with a fixed
+![M = 2^{27}](https://latex.codecogs.com/png.latex?M%20%3D%202%5E%7B27%7D "M = 2^{27}").
+These values are all very close to 1, which means we’re asking the
+browser to tell the truth very often, but note the amount of ones we’re
+actually adding to the vector, on average:
+
+![\\begin{aligned}
+2^{27} \\cdot 2^{-18} \\cdot \\frac{1/2} = 2^{8} = 256\\end{aligned}](https://latex.codecogs.com/png.latex?%5Cbegin%7Baligned%7D%0A2%5E%7B27%7D%20%5Ccdot%202%5E%7B-18%7D%20%5Ccdot%20%5Cfrac%7B1%2F2%7D%20%3D%202%5E%7B8%7D%20%3D%20256%5Cend%7Baligned%7D "\begin{aligned}
+2^{27} \cdot 2^{-18} \cdot \frac{1/2} = 2^{8} = 256\end{aligned}")
+
+This is a completely reasonable size to send over the wire, a mere 256
+additional integers to send. From a data interpretation perspective,
+this could be 256 different domains the user visited, 256 different
+advertisers, or campaigns, or ads, or any combination of these. We
+believe that this adds quite a bit of plausible deniability to the
+user’s data. Here’s what we see:
+
+<figure>
+<img src="assets/MURRE/img/p_auc.png" style="width:90.0%" alt="Relative AUC-ROC as a function of p" /><figcaption aria-hidden="true">Relative AUC-ROC as a function of p</figcaption>
+</figure>
+
+<figure>
+<img src="assets/MURRE/img/p_auc_pr.png" style="width:90.0%" alt="Relative AUC-PR as a function of p" /><figcaption aria-hidden="true">Relative AUC-PR as a function of p</figcaption>
+</figure>
+
+<figure>
+<img src="assets/MURRE/img/p_logloss.png" style="width:90.0%" alt="Relative log-loss as a function of p" /><figcaption aria-hidden="true">Relative log-loss as a function of p</figcaption>
+</figure>
+
+Note that we didn’t change our hyperparameters at all from what we do
+today, so maybe performance can be eked out beyond what we see here, but
+we didn’t want to fiddle with too many variables at once. The purely
+linear model fares quite well, whereas the FM model suffers a steep
+dropoff. We have some theories around this, but these are beyond the
+scope of this document.
 
 ### Weaknesses
 
