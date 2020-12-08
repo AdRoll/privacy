@@ -2,6 +2,9 @@
 
 Sandboxed Private User Reporting Functions Operating Within Limits
 
+See `SPURFLOW_slides.pdf` in this repository for the slides used in 2020-12-08
+web-adv meeting.
+
 ## Authors
 
 * Mikko Juola (NextRoll)
