@@ -258,31 +258,46 @@ Reporting agencies can store their reporting code at some location:
 https://dsp.example.com/.well-known/reporting.js
 ```
 
-This file should contain one function called `trailStoreMap()` that will do
+This file should contain two function called `trailStoreMap()` that will do
 whatever reporting computations the reporting agency is interested in.
+
+### Diagram
+
+![SPURFOWL diagram](assets/SPURFOWL/trail-map.png?raw=true)
 
 ### Code details
 
-`reporting.js` is a JavaScript module containing one function:
+`reporting.js` is a JavaScript module containing two functions:
 
-`trailStoreMap(<trail-store-for-reporting-origin>)`: Map has full access
-to the `trailStore` list for that Reporting Origin. This code is
-executed in the **user agent** in sandboxed execution mode.
+* `trailStoreMap(<array-of-events-for-reporting-origin>)`:
+  Map receives the `trailStore` array for that Reporting Origin, in the order they were added.
+  This is used to produce a summarized (read: smaller than the original trail) report that will be further aggregated by `trailStoreReduce`.
+  This code is executed in the **user agent** in sandboxed execution mode.
+
+* `trailStoreReduce(<array-of-outputs-from-trail-map-for-reporting-origin>)`:
+  Reduce receives an array of outputs from `trailStoreMap` for that Reporting Origin. The order of reports is random.
+  This code is executed in the **aggregator** in sandboxed execution mode.
 
 Here is a simple example of `trailStoreMap` that counts page views and conversion events. (Real-world code would likely be much more complicated).
 
-This code produces two reports: `page_views` and `conversions`.
+This code produces a report containing the sum of `page_views` and `conversions`.
 
 ```javascript
-function trailStoreMap(trail_store) {
-    var trail_length = trail_store.length();
+/**
+ * Trail Store Map, example implementation
+ * Counts the number of page views and conversions in a trail
+ *
+ * @param {array} trail The trail of events saved using trailStore.push()
+ * @return {object} report for a single trail of page views and conversions
+ */
+function trailStoreMap(trail) {
     var page_views = 0;
     var conversions = 0;
     
-    for (var i = 0; i < trail_length; ++i) {
+    for (var i = 0; i < trail.length; ++i) {
         // This returns the same objects as previously pushed with
         // window.trailStore.push() or through <a> tags.
-        var event = trail_store.get(i);
+        var event = trail[i];
         if (event['type'] === 'page_view') {
             page_views++;
         }
@@ -291,8 +306,52 @@ function trailStoreMap(trail_store) {
         }
     }
 
-    return {'page_views': {'value': page_views},
-            'conversions': {'value': conversions}}
+    return {
+        page_views,
+        conversions,
+    };
+}
+```
+
+The output of many runs of `trailStoreMap` is passed into `trailStoreReduce`, where aggregate cross-trail metrics can be computed.
+
+```javascript
+/**
+ * Trail Store Reduce, example implementation
+ * Aggregate metrics across trails
+ *
+ * @param {array} summaries The output of trailStoreMap for this reporting origin
+ * @return {object} aggregate report of page views and conversions
+ */
+function trailStoreReduce(summaries) {
+    var page_views = 0;
+    var conversions = 0;
+
+    for (var i = 0; i < summaries.length; ++i) {
+        var summary = summaries[i];
+        page_views += summary.page_views;
+        conversions += summary.conversions;
+    }
+
+    // Example to compute median via sorting
+    var page_views_median = summaries
+      .sort((a, b) => a.page_views - b.page_views)[Math.floor(summaries.length / 2)];
+    var conversions_median = summaries
+      .sort((a, b) => a.conversions - b.conversions)[Math.floor(summaries.length / 2)];
+
+    return {
+        length: summarizes.length,
+        page_views: {
+            total: page_views,
+            mean: page_views / summaries.length,
+            median: page_views_median,
+        },
+        conversions: {
+            total: conversions,
+            mean: conversions / summaries.length,
+            median: conversions_median,
+        }
+    };
 }
 ```
 
@@ -327,7 +386,7 @@ stop any further calls to `https://dsp.example.com/.well-known/reporting.js`.
 Reports can be simple JavaScript objects:
 
 ```javascript
-function trailStoreMap(store) {
+function trailStoreMap(trail) {
     ...
     return {<aggregation key 1>: {'value': <value>},
             <aggregation key 2>: {'value": <value>},
@@ -338,7 +397,7 @@ function trailStoreMap(store) {
 For example:
 
 ```javascript
-function trailStoreMap(store) {
+function trailStoreMap(trail) {
     ...
     return {'page_views': {'value': page_views},
             'conversions': {'value': conversions}}
@@ -376,7 +435,7 @@ In practical terms this means, for example, that we can encode constraints "page
 Example hypothetical API:
 
 ```javascript
-function trailStoreMap(trail_store) {
+function trailStoreMap(trail) {
     ...
     return { 'page-views': {'value': 23,
                             'range-proof': [0, 100] } }
@@ -391,7 +450,7 @@ Reports are processed independently from each other. To elaborate: let's say
 `trailStoreMap()` produced a report like this:
 
 ```javascript
-function trailStoreMap(store) {
+function trailStoreMap(trail) {
     return { 'page_views': { 'value': 100 },
              'unique_id':  { 'value': 0x123982 } }
 }
@@ -455,15 +514,15 @@ we can have a partially shared mechanism for both reporting and machine learning
 Each impression is given equal credit. Clicks are ignored in this example.
 
 ```javascript
-function trailStoreMap(trail_store) {
+function trailStoreMap(trail) {
     var seen_by_advertiser_by_ad = {};
     var credit_by_advertiser_by_ad = {};
     var totals_by_advertiser = {};
     var conversions_by_advertiser = {};
 
     // compute weights for all ads
-    for (var i = 0; i < trail_store.length(); ++i) {
-        var event = trail_store.get(i);
+    for (var i = 0; i < trail.length; ++i) {
+        var event = trail[i];
         if (event.type === 'impression') {
             var adv = event.conversion_destination;
             var ad = event.data;
