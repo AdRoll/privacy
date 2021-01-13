@@ -276,6 +276,8 @@ whatever reporting computations the reporting agency is interested in.
 
 * `trailStoreReduce(<array-of-outputs-from-trail-map-for-reporting-origin>)`:
   Reduce receives an array of outputs from `trailStoreMap` for that Reporting Origin. The order of reports is random.
+  The reduce function ensures that trails are considered across users, and are only computed when a threshold of
+  `trailStoreMap` results have been received, such that privacy criteria are met.
   This code is executed in the **aggregator** in sandboxed execution mode.
 
 Here is a simple example of `trailStoreMap` that counts page views and conversion events. (Real-world code would likely be much more complicated).
@@ -383,6 +385,15 @@ stop any further calls to `https://dsp.example.com/.well-known/reporting.js`.
 
 ### Reports
 
+Reports to the reporting origin are POSTed to some well-known location:
+
+```
+https://dsp.example.com/.well-known/report
+```
+
+This should accept a report from an aggregator with JSON post body,
+containing the output of `trailStoreReduce`.
+
 Reports can be simple JavaScript objects:
 
 ```javascript
@@ -462,6 +473,16 @@ K-anonymity can reject reports that are unique.
 
 In other words, this attack can be mitigated in the server-side aggregation
 infrastructure.
+
+### Can reports be run multiple times across the same dataset?
+
+No. SPURFOWL assumes one pass over the data will be sufficient for ad tech providers to compute any analytics they require.
+Browsers and aggregators are free to discard the original trails and the results of `trailStoreMap` and `trailStoreReduce` once
+they've been communicated to the Reporting Origin, or after a sufficient timeout period.
+
+Given SPURFOWL allows you to store and compute metrics in a general way, multiple types of metrics can be calculated
+in the map/reduce functions, foregoing the need to scan the data multiple times. This requirement is key to keeping the 
+storage and computational requirements on the browser and aggregator low.
 
 ## Relationships with other proposals
 
