@@ -1,9 +1,9 @@
 # PAURAQUE
 
 ## Authors
-[Jabari Pulliam](https://github.com/jabari-pulliam) (NextRoll)
-[Andrew Pascoe](https://github.com/appascoe) (NextRoll)
-[Valentino Volonghi](https://github.com/dialtone) (NextRoll)
+- [Jabari Pulliam](https://github.com/jabari-pulliam) (NextRoll)
+- [Andrew Pascoe](https://github.com/appascoe) (NextRoll)
+- [Valentino Volonghi](https://github.com/dialtone) (NextRoll)
 
 ## Introduction
 PAURAQUE (Profile-based API for User Attribute Queries) aims to address the concerns of doing User Attribute Targeting without third-party cookies and cross-site tracking through use of an in-browser and user managed profile database.
