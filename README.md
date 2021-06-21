@@ -9,3 +9,5 @@ Collection of privacy specs and discussion
 - [COWBIRD](COWBIRD.md): Coordinated Optimization Without Big Resource Demands. This
   document proposes browsers support a customizable federated learning platform for
   tiny machine learning models.
+- [PARAQUE](PARAQUE.md): Profile-based API for User Attribute Queries. Aims to
+  solve for attribute-based targeting in a privacy preserving way.
