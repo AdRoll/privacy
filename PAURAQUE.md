@@ -8,16 +8,15 @@
 ## Introduction
 PAURAQUE (Profile-based API for User Attribute Queries) aims to address the concerns of doing User Attribute Targeting without third-party cookies and cross-site tracking through use of an in-browser and user managed profile database.
 
+### User Attribute Targeting
+User Attribute Targeting is one of the main ways that advertising today is bought on the internet, either B2B or B2C. B2B advertising is based on User Attribute Targeting: Job function, employer, and firmographic data related to the user's employer are all considered attributes of the user visiting a site. The mechanisms used to determine these attributes are a mixture of IP address to domain name resolution (for employer) and linking of third-party cookies to attributes obtained from third-party data sources. This allows User Attribute Targeting to leverage traditional web advertising technology. However, these methods do not protect the user's privacy and are at risk from the deprecation of third-party cookies and the possible implementation of IP blindness.
+
 ### B2B vs. B2C Marketing
 B2B differs from traditional B2C marketing in that, instead of looking for individuals meeting certain demographic and behavioral criteria, it is focused on identifying key businesses (Accounts) based on firmographic data such as industry, company size, and location, then advertising to contacts at that business based on their role. Marketers identify sets of key accounts to target based on current or prospective business. This makes behavioral modeling of individual users not a core need for B2B.
 
 ### Core B2B Use Cases
 1. Target ads to people who work at companies on a Target Accounts List (TAL) who have a particular job function.
 2. Report on spend, clicks, impressions, page views, view-through conversions, and click-through conversions with company-level granularity.
-
-### User Attribute Targeting
-B2B advertising is based on User Attribute Targeting. Job function, employer, and firmographic data related to the user's employer are all considered attributes of the user visiting a site. The mechanisms used to determine these attributes are a mixture of IP address to domain name resolution (for employer) and linking of third-party cookies to attributes obtained from third-party data sources. This allows User Attribute Targeting to leverage traditional web advertising technology. However, these methods do not protect the user's privacy and are at risk from the deprecation of third-party cookies and the possible implementation of IP blindness.
-
 ## Proposed Solution
 
 > Instead, if I’m bothered by random ads, I’ll create a profile to tell advertisers that I’m interested in spy fiction, heavy metal, spicy food, and that I’m not into sports.
