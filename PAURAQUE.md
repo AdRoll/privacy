@@ -6,7 +6,7 @@
 - [Valentino Volonghi](https://github.com/dialtone) (NextRoll)
 
 ## Introduction
-PAURAQUE (Profile-based API for User Attribute Queries) aims to address the concerns of doing User Attribute Targeting without third-party cookies and cross-site tracking through use of an in-browser and user managed profile database.
+PAURAQUE (pou-rah-ke) (Profile-based API for User Attribute Queries) aims to address the concerns of doing User Attribute Targeting without third-party cookies and cross-site tracking through use of an in-browser and user managed profile database.
 
 ### User Attribute Targeting
 User Attribute Targeting is one of the main ways that advertising today is bought on the internet, either B2B or B2C. B2B advertising is based on User Attribute Targeting: Job function, employer, and firmographic data related to the user's employer are all considered attributes of the user visiting a site. The mechanisms used to determine these attributes are a mixture of IP address to domain name resolution (for employer) and linking of third-party cookies to attributes obtained from third-party data sources. This allows User Attribute Targeting to leverage traditional web advertising technology. However, these methods do not protect the user's privacy and are at risk from the deprecation of third-party cookies and the possible implementation of IP blindness.
